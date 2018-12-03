@@ -10,6 +10,10 @@ namespace PizzaStoreAppLibrary
         public Address Address { get; set; }
         public Dictionary<string, int> Invantory { get; set; }
 
+        public Location(string givenName)
+        {
+            Name = givenName;
+        }
 
     }
 }

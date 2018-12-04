@@ -26,9 +26,15 @@ namespace PizzaStoreApp
             Password = newPassword;
         }
 
-        public bool checkPassword(string testPassword)
+        public bool CheckPassword(string testPassword)
         {
-            if(testPassword == Password)
+            if (failedPasswordChecks > 3)
+            {
+                Console.WriteLine("Account locked; more than three failed login attempts"); // use error throw-catch here later?
+                return false;
+            }
+
+            if (testPassword == Password)
             {
                 failedPasswordChecks = 0;
                 return true;
@@ -38,6 +44,18 @@ namespace PizzaStoreApp
                 failedPasswordChecks++;
                 return false;
             }
+        }
+
+        public bool AdminPasswordReset(string adminUsername, string adminPassword, string newPassword)
+        {
+            if(adminUsername == "PizzaTheHutt" && adminPassword == "Barf... Puke... whatever!")
+            {
+                Password = newPassword;
+                failedPasswordChecks = 0;
+                return true;
+            }
+            // mail to someone: failed admin override attempted
+            return false;
         }
 
     }

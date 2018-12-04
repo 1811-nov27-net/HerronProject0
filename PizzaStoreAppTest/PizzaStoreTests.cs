@@ -76,7 +76,7 @@ namespace PizzaStoreAppTest
             Customer SUT = new Customer(testName, testPW);
 
             // act
-            bool result = SUT.checkPassword(testInput);
+            bool result = SUT.CheckPassword(testInput);
 
             // assert
             Assert.Equal(result, expected);

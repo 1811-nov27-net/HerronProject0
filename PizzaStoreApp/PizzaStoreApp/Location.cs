@@ -8,7 +8,7 @@ namespace PizzaStoreAppLibrary
     {
         public string Name { get; set; }
         public Address Address { get; set; }
-        private Dictionary<string, int> Invantory;
+        public Dictionary<string, int> Invantory = new Dictionary<string, int>();
 
         public Location(string givenName)
         {

@@ -11,6 +11,17 @@ namespace PizzaStoreAppLibrary
         public List<string> Ingrediants { get; set; }
         public PizzaSize Size { get; set; }
 
+        public Pizza (PizzaSize size, string[] ingrediants)
+         {
+            Size = size;
+            foreach (string item in ingrediants)
+            {
+                Ingrediants.Add(item);
+            }
+            UpdatePrice();
+         }
+
+
         public double UpdatePrice()
         {
             _price = 0;

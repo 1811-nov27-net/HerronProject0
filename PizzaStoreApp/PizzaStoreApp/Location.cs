@@ -49,6 +49,7 @@ namespace PizzaStoreAppLibrary
             {
                 Invantory[item] -= ingrediantsNeeded[item];
             }
+            order.Store = Name;
             return true;
         }
 

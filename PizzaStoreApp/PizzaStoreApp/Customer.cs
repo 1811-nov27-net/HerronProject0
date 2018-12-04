@@ -12,6 +12,7 @@ namespace PizzaStoreApp
         public Address Address { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
+        public string FavoriteStore { get; set; }
         public Dictionary<string, int> PrevLocationsOrdered { get; set; } // number of times ordered from locations, by name of location
         public List<Order> PreviousOrders = new List<Order>();
 
@@ -57,6 +58,7 @@ namespace PizzaStoreApp
             // mail to someone: failed admin override attempted
             return false;
         }
+
 
     }
 }

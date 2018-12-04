@@ -21,6 +21,16 @@ namespace PizzaStoreAppLibrary
         public double CostBeforeTax { get { return _costBeforeTax; } }
         public double TotalCost { get { return _totalCost; } }
 
+        public Order (Customer customer, string password)
+        {
+            if(customer.CheckPassword(password))
+            {
+                User = customer.Username;
+                Store = customer.FavoriteStore;
+            }
+
+        }
+
         public void AddPizza (Pizza.PizzaSize size, string[] ingrediants)
         {
             Pizza pizza = new Pizza(size, ingrediants);
@@ -40,6 +50,8 @@ namespace PizzaStoreAppLibrary
             _totalCost += DeliveryFee; // delivery fee
             return _totalCost;
         }
+
+
 
     }
 

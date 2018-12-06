@@ -15,7 +15,7 @@ namespace PizzaStoreAppLibrary
         public static double TaxRate = .08;
         public string Store { get; set; }
         private string _user;
-        public string User { get { return _user} }
+        public string User { get { return _user; } }
         public List<Pizza> pizzas;
         private double _totalCost;
         private double _costBeforeTax;

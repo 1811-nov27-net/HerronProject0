@@ -33,7 +33,8 @@ namespace PizzaStoreAppLibrary
                 }
                 catch (NullReferenceException e)
                 {
-                    Store = null;
+                    if (customer.PreviousOrders.Count > 0)
+                        Store = customer.PreviousOrders[customer.PreviousOrders.Count - 1].Store;
                     
                 };
             }

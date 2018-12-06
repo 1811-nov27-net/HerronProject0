@@ -27,16 +27,8 @@ namespace PizzaStoreAppLibrary
             if(customer.CheckPassword(password))
             {
                 _user = customer.Username;
-                try
-                {
-                    Store = customer.FavoriteStore;
-                }
-                catch (NullReferenceException e)
-                {
-                    if (customer.PreviousOrders.Count > 0)
-                        Store = customer.PreviousOrders[customer.PreviousOrders.Count - 1].Store;
-                    
-                };
+                Store = customer.FavoriteStore ?? customer.PreviousOrders[customer.PreviousOrders.Count - 1].Store ?? "Main";
+                
             }
 
         }

@@ -14,7 +14,8 @@ namespace PizzaStoreAppLibrary
         public static double DeliveryFee = 2.00;
         public static double TaxRate = .08;
         public string Store { get; set; }
-        public string User { get; set; }
+        private string _user;
+        public string User { get { return _user} }
         public List<Pizza> pizzas;
         private double _totalCost;
         private double _costBeforeTax;
@@ -25,8 +26,16 @@ namespace PizzaStoreAppLibrary
         {
             if(customer.CheckPassword(password))
             {
-                User = customer.Username;
-                Store = customer.FavoriteStore;
+                _user = customer.Username;
+                try
+                {
+                    Store = customer.FavoriteStore;
+                }
+                catch (NullReferenceException e)
+                {
+                    Store = null;
+                    
+                };
             }
 
         }

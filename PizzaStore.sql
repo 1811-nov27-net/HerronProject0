@@ -82,6 +82,7 @@ create table PS.PizzaOrder
 	PizzaOrderID int identity not null,
 	StoreID int not null,
 	CustomerID int not null,
+	TotalDue money not null,
 	DatePlaced datetime2 not null,
 	constraint PS_PizzaOrder_ID primary key (PizzaOrderID)
 );
@@ -93,6 +94,7 @@ create table PS.Pizza
 (
 	PizzaID int identity not null,
 	PizzaOrderID int not null,
+	Size int not null,
 	Sausage bit,
 	Peperoni bit,
 	[Black Olives] bit,

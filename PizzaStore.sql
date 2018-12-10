@@ -84,7 +84,10 @@ create table PS.PizzaOrder
 	DatePlaced datetime2 not null default getutcdate(),
 	constraint PS_PizzaOrder_ID primary key (PizzaOrderID)
 );
-
+alter table PS.PizzaOrder
+	add CustomerAddressID int not null;
+alter table PS.PizzaOrder
+	add constraint FK_PO_CustAdd Foreign Key (CustomerAddressID) references PS.CustomerAddress (CustomerAddressID);
 alter table PS.PizzaOrder
 	add constraint FK_PO_Store Foreign key (StoreID) references PS.Store (StoreID);
 alter table PS.PizzaOrder

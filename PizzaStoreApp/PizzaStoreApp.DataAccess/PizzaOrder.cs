@@ -15,8 +15,10 @@ namespace PizzaStoreApp.DataAccess
         public int CustomerId { get; set; }
         public decimal TotalDue { get; set; }
         public DateTime DatePlaced { get; set; }
+        public int CustomerAddressId { get; set; }
 
         public virtual Customer Customer { get; set; }
+        public virtual CustomerAddress CustomerAddress { get; set; }
         public virtual Store Store { get; set; }
         public virtual ICollection<PizzasInOrder> PizzasInOrder { get; set; }
     }

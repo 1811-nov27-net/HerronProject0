@@ -5,6 +5,11 @@ namespace PizzaStoreApp.DataAccess
 {
     public partial class CustomerAddress
     {
+        public CustomerAddress()
+        {
+            PizzaOrder = new HashSet<PizzaOrder>();
+        }
+
         public int CustomerAddressId { get; set; }
         public string Street { get; set; }
         public string Street2 { get; set; }
@@ -16,5 +21,6 @@ namespace PizzaStoreApp.DataAccess
 
         public virtual Customer Customer { get; set; }
         public virtual Store Store { get; set; }
+        public virtual ICollection<PizzaOrder> PizzaOrder { get; set; }
     }
 }

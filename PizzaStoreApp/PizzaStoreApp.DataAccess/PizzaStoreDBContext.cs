@@ -27,8 +27,10 @@ namespace PizzaStoreApp.DataAccess
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer(SecretString.ConnectionString);
-            
+            if (!optionsBuilder.IsConfigured)
+            {
+                optionsBuilder.UseSqlServer(SecretString.ConnectionString);
+            }
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -171,6 +173,8 @@ namespace PizzaStoreApp.DataAccess
 
                 entity.Property(e => e.PizzaOrderId).HasColumnName("PizzaOrderID");
 
+                entity.Property(e => e.CustomerAddressId).HasColumnName("CustomerAddressID");
+
                 entity.Property(e => e.CustomerId).HasColumnName("CustomerID");
 
                 entity.Property(e => e.DatePlaced).HasDefaultValueSql("(getutcdate())");
@@ -178,6 +182,12 @@ namespace PizzaStoreApp.DataAccess
                 entity.Property(e => e.StoreId).HasColumnName("StoreID");
 
                 entity.Property(e => e.TotalDue).HasColumnType("money");
+
+                entity.HasOne(d => d.CustomerAddress)
+                    .WithMany(p => p.PizzaOrder)
+                    .HasForeignKey(d => d.CustomerAddressId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_PO_CustAdd");
 
                 entity.HasOne(d => d.Customer)
                     .WithMany(p => p.PizzaOrder)

@@ -46,19 +46,6 @@ namespace PizzaStoreApp
                 return false;
             }
         }
-
-        public bool AdminPasswordReset(string adminUsername, string adminPassword, string newPassword)
-        {
-            if(adminUsername == "PizzaTheHutt" && adminPassword == "Barf... Puke... whatever!")
-            {
-                Password = newPassword;
-                failedPasswordChecks = 0;
-                return true;
-            }
-            // mail to someone: failed admin override attempted
-            return false;
-        }
-
-
+        
     }
 }

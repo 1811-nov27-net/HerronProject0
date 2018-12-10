@@ -14,6 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\PizzaStoreApp\PizzaStoreApp.DataAccess\PizzaStoreApp.DataAccess.csproj" />
     <ProjectReference Include="..\PizzaStoreApp\PizzaStoreApp\PizzaStoreAppLibrary.csproj" />
   </ItemGroup>
 

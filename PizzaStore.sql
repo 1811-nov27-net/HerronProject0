@@ -143,5 +143,14 @@ alter table PS.IngrediantsOnPizza
 alter table PS.IngrediantsOnPizza
 	add constraint FK_IoP_Ingrediants foreign key (IngrediantID) references PS.IngrediantList (IngrediantID);
 
+alter table PS.Invantory
+	add constraint PK_Invantory primary key (StoreID, IngrediantID);
+
+alter table PS.IngrediantsOnPizza
+	add constraint PK_IoP primary key (PizzaID, IngrediantID);
+
+alter table PS.PizzasInOrder
+	add constraint PK_PiO primary key (PizzaID, PizzaOrderID);
+
 
 

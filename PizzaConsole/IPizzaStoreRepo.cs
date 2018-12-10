@@ -20,7 +20,7 @@ namespace PizzaConsole
         void UpdateCustomer(Customer customer);
         void AddIngrediantToList(string AdminUsername, string AdminPassword, string IngrediantName);
         void RemoveLocation(string AdminUsername, string AdminPassword, Location location);
-        bool ChangeUserPassword(string AdminUsername, string AdminPassword, Customer customer, string NewPassword);
+        Customer ChangeUserPassword(string AdminUsername, string AdminPassword, Customer customer, string NewPassword);
 
     }
 }

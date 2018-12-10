@@ -63,7 +63,7 @@ alter table PS.CustomerAddress
 
 -- drop table PS.Invantory
 
-create table PS.Invantory
+create table PS.Invantory -- stores the ingrediant invantory for each store
 (
 	StoreID int not null,
 	IngrediantID int not null,

@@ -33,7 +33,7 @@ namespace PizzaStoreAppLibrary
 
         }
 
-        public void AddPizza (Pizza.PizzaSize size, string[] ingrediants)
+        public void AddPizza (Pizza.PizzaSize size, HashSet<string> ingrediants)
         {
             Pizza pizza = new Pizza(size, ingrediants);
             pizzas.Add(pizza);

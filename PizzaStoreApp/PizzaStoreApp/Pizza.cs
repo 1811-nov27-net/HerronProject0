@@ -8,10 +8,10 @@ namespace PizzaStoreAppLibrary
     {
         private double _price;
         public double Price { get { return _price; } }
-        public List<string> Ingrediants { get; set; }
+        public HashSet<string> Ingrediants { get; set; }
         public PizzaSize Size { get; set; }
 
-        public Pizza (PizzaSize size, string[] ingrediants)
+        public Pizza (PizzaSize size, HashSet<string> ingrediants)
          {
             Size = size;
             foreach (string item in ingrediants)

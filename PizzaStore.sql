@@ -46,11 +46,20 @@ create table PS.Customer
 	Password nvarchar(100) not null,
 	FirstName nvarchar(100) not null,
 	LastName nvarchar(100) not null,
-	CustomerAddressID int not null,
-	FavoriteStore int,
+	FavoriteStoreID int,
 
 	constraint PS_Customer_ID primary key (CustomerID)
 );
+
+-- drop table PS.CustomerAddressLookup
+
+
+create table PS.CustomerAddressLookup
+(
+	CustomerID int not null,
+	CustomerAddressID int not null
+);
+
 
 -- drop table PS.Store
 
@@ -58,21 +67,17 @@ create table PS.Store
 (
 	StoreID int identity not null,
 	StoreAddressID int not null,
-	Sausage int,
-	Peperoni int,
-	[Black Olives] int,
-	[Green Olives] int,
-	[Bell Peppers] int,
-	[Jalapenos] int,
-	Chicken int,
-	[Hot Sauce] int,
-	Mushrooms int,
-	Pineapple int,
-	Onions int,
-	Tomatoes int,
-	[Extra Cheese] int,
-
 	constraint PS_Store_ID primary key (StoreID)
+);
+
+
+-- drop table PS.Invantory
+
+create table PS.Invantory
+(
+	StoreID int not null,
+	IngrediantID int not null,
+	Quantity int not null
 );
 
 -- drop table PS.PizzaOrder
@@ -87,27 +92,39 @@ create table PS.PizzaOrder
 	constraint PS_PizzaOrder_ID primary key (PizzaOrderID)
 );
 
--- drop table PS.Order
+-- drop table PS.PizzasInOrder
 
+create table PS.PizzasInOrder
+(
+	PizzaID int not null,
+	PizzaOrderID int not null,
+	Quantity int not null
+);
+
+
+-- drop table PS.Pizza
 
 create table PS.Pizza
 (
 	PizzaID int identity not null,
-	PizzaOrderID int not null,
 	Size int not null,
-	Sausage bit,
-	Peperoni bit,
-	[Black Olives] bit,
-	[Green Olives] bit,
-	[Bell Peppers] bit,
-	[Jalapenos] bit,
-	Chicken bit,
-	[Hot Sauce] bit,
-	Mushrooms bit,
-	Pineapple bit,
-	Onions bit,
-	Tomatoes bit,
-	[Extra Cheese] bit,
+	Cost money not null,
 	constraint PS_Pizza_ID primary key (PizzaID)
 );
 
+-- drop table PS.IngrediantList
+
+create table PS.IngrediantList
+(
+	IngrediantID int identity not null,
+	IngrediantName nvarchar(100),
+	constraint PS_Ingrediant_ID primary key (IngrediantID)
+);
+
+-- drop table PS.IngrediantsOnPizza
+
+create table PS.IngrediantsOnPizza
+(
+	PizzaID int not null,
+	IngrediantID int not null,
+);

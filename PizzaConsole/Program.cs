@@ -130,7 +130,6 @@ namespace PizzaConsole
             Console.WriteLine("Creating new store");
             Console.WriteLine("Store Name:");
             StoreClass NewStore = new StoreClass(Console.ReadLine());
-            bool errors = false;
             try
             {
 
@@ -146,25 +145,57 @@ namespace PizzaConsole
                 int tempZip;
                 Int32.TryParse(Console.ReadLine(), out tempZip);
                 NewStore.Address.Zip = tempZip;
-            }
-            catch (InvalidNullFieldException e)
-            {
-                errors = true;
-                Console.WriteLine($"Error: {e.Message} cannot be null");
-                
-            }
 
-            if (!errors)
-            {
                 PR.AddStore(AdminUsername: username, AdminPassword: password, location: NewStore);
                 PR.Save();
 
-                Console.WriteLine("Store added.");
             }
+            catch (InvalidNullFieldException e)
+            {
+                Console.WriteLine($"Error: {e.Message} cannot be null");
+                return;
+                
+            }
+            catch (InvalidLoginException e)
+            {
+                Console.WriteLine("Admin Login or Password does not match database. Contact DB Admin.");
+                Console.WriteLine(e.Message);
+                return;
+            }
+            Console.WriteLine("Store added.");
         }
 
         private static void CloseLocation(string username, string password, IPizzaStoreRepo PR)
         {
+            Console.WriteLine("Store name:");
+            string NameOfLocationToClose = Console.ReadLine();
+            List<StoreClass> stores = (List<StoreClass>) PR.LoadLocations();
+            StoreClass StoreToClose = stores.Where(s => s.Name == NameOfLocationToClose).First();
+            if(StoreToClose == null)
+            {
+                Console.WriteLine("No store by that name found.");
+                return;
+            }
+            Console.WriteLine($"Are you sure you want to close the location {StoreToClose.Name} in {StoreToClose.Address.City}, {StoreToClose.Address.State}?");
+            string answer = Console.ReadLine();
+            if(answer == "Yes")
+            {
+                try
+                {
+                    PR.RemoveLocation(username, password, StoreToClose);
+                    PR.Save();
+                    Console.WriteLine("Store Removed.");
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine($"Error: {e.Message}");
+                    
+                }
+            }
+            else
+            {
+                Console.WriteLine("Store closure canceled.");
+            }
 
         }
         private static void SearchUserByName(string username, string password, IPizzaStoreRepo PR)

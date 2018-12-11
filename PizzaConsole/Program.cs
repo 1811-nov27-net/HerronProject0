@@ -19,7 +19,7 @@ namespace PizzaConsole
             var options = optionsBuilder.Options;
 
             var dbContext = new pda.PizzaStoreDBContext(options);
-            IPizzaStoreRepo PizzaRepository = new pda.PizzaStoreRepo(dbContext);
+            IPizzaStoreRepo PR = new pda.PizzaStoreRepo(dbContext);
 
 
             string UserInput;
@@ -42,7 +42,7 @@ namespace PizzaConsole
                 {
                     try
                     {
-                        AdminLoop(username, password);
+                        AdminLoop(username, password, PR);
                     }
                     catch (InvalidLoginException e)
                     {
@@ -55,7 +55,7 @@ namespace PizzaConsole
                 {
                     try
                     {
-                        CustomerLoop(username, password);
+                        CustomerLoop(username, password, PR);
 
                     }
                     catch (InvalidLoginException e)
@@ -76,7 +76,7 @@ namespace PizzaConsole
 
         }
 
-        private static void AdminLoop(string username, string password)
+        private static void AdminLoop(string username, string password, IPizzaStoreRepo PR)
         {
             if (username != SecretString.AdminUsername || password != SecretString.AdminPassword)
             {
@@ -91,27 +91,27 @@ namespace PizzaConsole
             {
                 if (CurrentAction == 'a')
                 {
-                    AddLocation(username, password);
+                    AddLocation(username, password, PR);
                 }
                 if (CurrentAction == 'c')
                 {
-                    CloseLocation(username, password);
+                    CloseLocation(username, password, PR);
                 }
                 if (CurrentAction == 'u')
                 {
-                    OrderHistoryByName(username, password);
+                    OrderHistoryByName(username, password, PR);
                 }
                 if (CurrentAction == 'l')
                 {
-                    OrderHistoryByLocation(username, password);
+                    OrderHistoryByLocation(username, password, PR);
                 }
                 if (CurrentAction == 'n')
                 {
-                    SearchUserByName(username, password);
+                    SearchUserByName(username, password, PR);
                 }
                 if (CurrentAction == 'o')
                 {
-                    DetailsOfOrder(username, password);
+                    DetailsOfOrder(username, password, PR);
                 }
 
 
@@ -125,7 +125,7 @@ namespace PizzaConsole
 
         }
 
-        private static void AddLocation(string username, string password)
+        private static void AddLocation(string username, string password, IPizzaStoreRepo PR)
         {
             Console.WriteLine("Creating new store");
             Console.WriteLine("Store Name:");
@@ -143,34 +143,34 @@ namespace PizzaConsole
             Int32.TryParse(Console.ReadLine(), out tempZip);
             NewStore.Address.Zip = tempZip;
 
-            PizzaRepository.AddStore(AdminUsername: username, AdminPassword: password, location: NewStore);
+            PR.AddStore(AdminUsername: username, AdminPassword: password, location: NewStore);
 
 
         }
 
-        private static void CloseLocation(string username, string password)
+        private static void CloseLocation(string username, string password, IPizzaStoreRepo PR)
         {
 
         }
-        private static void SearchUserByName(string username, string password)
+        private static void SearchUserByName(string username, string password, IPizzaStoreRepo PR)
         {
 
         }
-        private static void OrderHistoryByLocation(string username, string password)
+        private static void OrderHistoryByLocation(string username, string password, IPizzaStoreRepo PR)
         {
 
         }
-        private static void OrderHistoryByName(string username, string password)
+        private static void OrderHistoryByName(string username, string password, IPizzaStoreRepo PR)
         {
 
         }
-        private static void DetailsOfOrder(string username, string password)
+        private static void DetailsOfOrder(string username, string password, IPizzaStoreRepo PR)
         {
 
         }
 
 
-        private static void CustomerLoop(string username, string password)
+        private static void CustomerLoop(string username, string password, IPizzaStoreRepo PR)
         {
 
         }

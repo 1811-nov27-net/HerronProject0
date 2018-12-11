@@ -213,6 +213,8 @@ namespace PizzaStoreApp.DataAccess
 
                 entity.Property(e => e.PizzaOrderId).HasColumnName("PizzaOrderID");
 
+                entity.Property(e => e.Quantity).HasDefaultValueSql("((1))");
+
                 entity.HasOne(d => d.Pizza)
                     .WithMany(p => p.PizzasInOrder)
                     .HasForeignKey(d => d.PizzaId)
@@ -230,6 +232,10 @@ namespace PizzaStoreApp.DataAccess
             {
                 entity.ToTable("Store", "PS");
 
+                entity.HasIndex(e => e.StoreName)
+                    .HasName("UQ__Store__9FD6996204A6D278")
+                    .IsUnique();
+
                 entity.Property(e => e.StoreId).HasColumnName("StoreID");
 
                 entity.Property(e => e.City)
@@ -237,6 +243,10 @@ namespace PizzaStoreApp.DataAccess
                     .HasMaxLength(100);
 
                 entity.Property(e => e.State)
+                    .IsRequired()
+                    .HasMaxLength(100);
+
+                entity.Property(e => e.StoreName)
                     .IsRequired()
                     .HasMaxLength(100);
 

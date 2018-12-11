@@ -21,6 +21,7 @@ namespace PizzaStoreAppLibrary
         private double _costBeforeTax;
         public double CostBeforeTax { get { return _costBeforeTax; } }
         public double TotalCost { get { return _totalCost; } }
+        public readonly DateTime DatePlaced;
 
         public OrderClass (CustomerClass customer, string password)
         {

@@ -71,9 +71,85 @@ namespace PizzaConsole
             {
                 throw new InvalidLoginException("Invalid Admin Username and/or Password");
             }
+            Console.WriteLine("(A)dd location, (C)lose location, display order history by (u)ser, display order history by " +
+                "(l)ocation, search user by (n)ame, display details of an (o)rder (any other key to quit).");
+            string UserInput = Console.ReadLine();
+            char CurrentAction = Char.ToLower(UserInput[0]);
+            char[] AcceptableActions = { 'a', 'c', 'u', 'l', 'n', 'o' };
+            while (Array.Exists<char>(AcceptableActions,c => c == CurrentAction))
+            {
+                if (CurrentAction == 'a')
+                {
+                    AddLocation(username, password);
+                }
+                if (CurrentAction == 'c')
+                {
+                    CloseLocation(username, password);
+                }
+                if (CurrentAction == 'u')
+                {
+                    OrderHistoryByName(username, password);
+                }
+                if (CurrentAction == 'l')
+                {
+                    OrderHistoryByLocation(username, password);
+                }
+                if (CurrentAction == 'n')
+                {
+                    SearchUserByName(username, password);
+                }
+                if (CurrentAction == 'o')
+                {
+                    DetailsOfOrder(username, password);
+                }
+
+
+                Console.WriteLine("(A)dd location, (C)lose location, display order history by (u)ser, display order history by " +
+                  "(l)ocation, search user by (n)ame, display details of an (o)rder (any other key to quit).");
+                UserInput = Console.ReadLine();
+                CurrentAction = Char.ToLower(UserInput[0]);
+
+            }
 
 
         }
+
+        private static void AddLocation(string username, string password)
+        {
+            Console.WriteLine("Creating new store");
+            Console.WriteLine("Store Name:");
+            StoreClass NewStore = new StoreClass(Console.ReadLine());
+            Console.WriteLine("Address, line 1:");
+
+            Console.WriteLine("Address, line 2:");
+            Console.WriteLine("City:");
+            Console.WriteLine("State:");
+            Console.WriteLine("Zip:");
+
+
+        }
+
+        private static void CloseLocation(string username, string password)
+        {
+
+        }
+        private static void SearchUserByName(string username, string password)
+        {
+
+        }
+        private static void OrderHistoryByLocation(string username, string password)
+        {
+
+        }
+        private static void OrderHistoryByName(string username, string password)
+        {
+
+        }
+        private static void DetailsOfOrder(string username, string password)
+        {
+
+        }
+
 
         private static void CustomerLoop(string username, string password)
         {

@@ -14,6 +14,7 @@ go
 create table PS.Store
 (
 	StoreID int identity not null,
+	StoreName nvarchar(100) not null unique,
 	Street nvarchar(100) not null,
 	Street2 nvarchar(100) null,
 	City nvarchar(100) not null,
@@ -21,6 +22,7 @@ create table PS.Store
 	State nvarchar(100) not null,
 	constraint PS_Store_ID primary key (StoreID)
 );
+
 
 -- drop table PS.CustomerAddress
 
@@ -80,12 +82,13 @@ create table PS.PizzaOrder
 	PizzaOrderID int identity not null,
 	StoreID int not null,
 	CustomerID int not null,
+	CustomerAddressID int not null,
 	TotalDue money not null,
 	DatePlaced datetime2 not null default getutcdate(),
 	constraint PS_PizzaOrder_ID primary key (PizzaOrderID)
 );
-alter table PS.PizzaOrder
-	add CustomerAddressID int not null;
+
+
 alter table PS.PizzaOrder
 	add constraint FK_PO_CustAdd Foreign Key (CustomerAddressID) references PS.CustomerAddress (CustomerAddressID);
 alter table PS.PizzaOrder
@@ -99,11 +102,9 @@ create table PS.PizzasInOrder
 (
 	PizzaID int not null,
 	PizzaOrderID int not null,
-	Quantity int not null
+	Quantity int not null default 1
 );
 
-alter table PS.PizzasInOrder
-	add default 1 for Quantity;
 
 -- drop table PS.Pizza
 
@@ -160,14 +161,14 @@ alter table PS.PizzasInOrder
 -- Add entries to database
 
 
-insert into PS.Store (Street, Street2, City, Zip, State) values
-	('Order came from closed location',null,'Not a City',00000,'Not a State'),
-	('1234 Main Street',null,'Austin',73301,'Texas'),
-	('4321 Yerba Verde Bulivard',null,'San Diego',91932,'California'),
-	('333 State Street',null,'Madison',53701,'Wisconsin'),
-	('2733 East 2100 South','Suite 2B','Salt Lake City',84044,'Utah'),
-	('5421 Redridge Road',null,'Seattle',98101,'Washington'),
-	('999 Main Street',null,'Augusta',30805,'Georgia')
+insert into PS.Store (StoreName, Street, Street2, City, Zip, State) values
+	('Closed','Order came from closed location',null,'Not a City',00000,'Not a State'),
+	('Austin Main', '1234 Main Street',null,'Austin',73301,'Texas'),
+	('SD Main', '4321 Yerba Verde Bulivard',null,'San Diego',91932,'California'),
+	('State Street Location','333 State Street',null,'Madison',53701,'Wisconsin'),
+	('SLC Store','2733 East 2100 South','Suite 2B','Salt Lake City',84044,'Utah'),
+	('Headquarters','5421 Redridge Road',null,'Seattle',98101,'Washington'),
+	('Augusta Branch','999 Main Street',null,'Augusta',30805,'Georgia')
 	;
 
 insert into PS.Customer(FirstName, LastName, Username, Password) values

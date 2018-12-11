@@ -26,10 +26,33 @@ namespace PizzaConsole
                 username = Console.ReadLine();
                 Console.WriteLine("Password:");
                 password = Console.ReadLine();
+                
+                if(CurrentAction == 'a')
+                {
+                    try
+                    {
+                        AdminLoop(username, password);
+                    }
+                    catch (InvalidLoginException e)
+                    {
+                        Console.WriteLine(e.Message);
+                        
+                    }
+                }
 
-                // find customer
-                CustomerClass customer = new CustomerClass(username, password);
+                if(CurrentAction == 'l')
+                {
+                    try
+                    {
+                        CustomerLoop(username, password);
 
+                    }
+                    catch (InvalidLoginException e)
+                    {
+                        Console.WriteLine(e.Message);
+                        
+                    }
+                }
 
                 Console.WriteLine("Login (l), Quit (q) or Admin (a)");
                 UserInput = Console.ReadLine();
@@ -39,6 +62,21 @@ namespace PizzaConsole
             }
 
 
+
+        }
+
+        private static void AdminLoop(string username, string password)
+        {
+            if (username != SecretString.AdminUsername || password != SecretString.AdminPassword)
+            {
+                throw new InvalidLoginException("Invalid Admin Username and/or Password");
+            }
+
+
+        }
+
+        private static void CustomerLoop(string username, string password)
+        {
 
         }
 

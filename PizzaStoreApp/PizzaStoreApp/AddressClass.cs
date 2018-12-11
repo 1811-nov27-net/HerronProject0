@@ -4,7 +4,7 @@ using System.Text;
 
 namespace PizzaStoreAppLibrary
 {
-    public class Address
+    public class AddressClass
     {
         public string Street { get; set; }
         public string Apartment { get; set; }

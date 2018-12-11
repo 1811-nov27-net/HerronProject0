@@ -6,7 +6,7 @@ using PizzaStoreAppLibrary;
 
 namespace PizzaStoreAppLibrary
 {
-    public class Order
+    public class OrderClass
     {
         public static string[] Ingrediants = { "Sausage", "Peperoni", "Black Olives", "Green Olives", "Bell Peppers", "Jalapenos", "Chicken", "Hot Sauce", "Mushrooms",
             "Pineapple", "Onions", "Tomatoes", "Extra Cheese"};
@@ -16,13 +16,13 @@ namespace PizzaStoreAppLibrary
         public string Store { get; set; }
         private string _user;
         public string User { get { return _user; } }
-        public List<Pizza> pizzas;
+        public List<PizzaClass> pizzas;
         private double _totalCost;
         private double _costBeforeTax;
         public double CostBeforeTax { get { return _costBeforeTax; } }
         public double TotalCost { get { return _totalCost; } }
 
-        public Order (Customer customer, string password)
+        public OrderClass (CustomerClass customer, string password)
         {
             if(customer.CheckPassword(password))
             {
@@ -33,9 +33,9 @@ namespace PizzaStoreAppLibrary
 
         }
 
-        public void AddPizza (Pizza.PizzaSize size, HashSet<string> ingrediants)
+        public void AddPizza (PizzaClass.PizzaSize size, HashSet<string> ingrediants)
         {
-            Pizza pizza = new Pizza(size, ingrediants);
+            PizzaClass pizza = new PizzaClass(size, ingrediants);
             pizzas.Add(pizza);
             UpdateTotal();
         }
@@ -43,7 +43,7 @@ namespace PizzaStoreAppLibrary
         public double UpdateTotal()
         {
             _totalCost = 0;
-            foreach (Pizza pizza in pizzas)
+            foreach (PizzaClass pizza in pizzas)
             {
                 _totalCost += pizza.Price;
             }

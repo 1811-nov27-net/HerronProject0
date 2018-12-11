@@ -26,7 +26,7 @@ namespace PizzaConsole
                 password = Console.ReadLine();
 
                 // find customer
-                Customer customer = new Customer(username, password);
+                CustomerClass customer = new CustomerClass(username, password);
 
                 
                 Console.WriteLine("Enter (q) to quit, anything else to continue");
@@ -38,11 +38,11 @@ namespace PizzaConsole
 
         }
 
-        public void OrderPizza(Customer customer, string password)
+        public void OrderPizza(CustomerClass customer, string password)
         {
             string answer;
 
-            Order CurrentOrder = new Order(customer, password);
+            OrderClass CurrentOrder = new OrderClass(customer, password);
             bool placeOrder = false, quitLoop = false;
             while (placeOrder == false && quitLoop == false)
             {
@@ -55,17 +55,17 @@ namespace PizzaConsole
 
         }
 
-        public Pizza AddPizza(Order order)
+        public PizzaClass AddPizza(OrderClass order)
         {
 
-            Pizza.PizzaSize inputSize;
+            PizzaClass.PizzaSize inputSize;
             Console.WriteLine("Size: ");
-            foreach (var size in Enum.GetValues(typeof(Pizza.PizzaSize)))
+            foreach (var size in Enum.GetValues(typeof(PizzaClass.PizzaSize)))
             {
                 Console.WriteLine($"{size}: {size.ToString()}");
             }
 
-            inputSize = (Pizza.PizzaSize) Console.ReadLine()[0];
+            inputSize = (PizzaClass.PizzaSize) Console.ReadLine()[0];
 
             string userInput ="y";
             HashSet<string> ingrediants = new HashSet<string>();
@@ -87,7 +87,7 @@ namespace PizzaConsole
                 userInput = Console.ReadLine();
                 if (userInput[0] != 'd' && userInput[0] != 'D')
                 {
-                    if (Order.Ingrediants.Contains(userInput))
+                    if (OrderClass.Ingrediants.Contains(userInput))
                     {
                         ingrediants.Add(userInput);
                     }
@@ -99,7 +99,7 @@ namespace PizzaConsole
 
             }
 
-            return new Pizza(inputSize,ingrediants);
+            return new PizzaClass(inputSize,ingrediants);
 
         }
     }

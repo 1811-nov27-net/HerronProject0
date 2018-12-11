@@ -8,20 +8,20 @@ namespace PizzaConsole
 {
     interface IPizzaStoreRepo
     {
-        Customer LoadCustomerByUsername(string username);
-        IEnumerable<Location> LoadLocations();
-        void AddCustomer(Customer customer);
-        void AddAddressToCustomer(Address address, Customer customer);
-        void RemoveCustomerAddress(Address address, Customer customer);
-        IEnumerable<Order> LoadOrdersByLocation(Location location);
-        IEnumerable<Order> LoadOrdersByCustomer(Customer customer);
-        void PlaceOrder(Order order);
+        CustomerClass LoadCustomerByUsername(string username);
+        IEnumerable<StoreClass> LoadLocations();
+        void AddCustomer(CustomerClass customer);
+        void AddAddressToCustomer(AddressClass address, CustomerClass customer);
+        void RemoveCustomerAddress(AddressClass address, CustomerClass customer);
+        IEnumerable<OrderClass> LoadOrdersByLocation(StoreClass location);
+        IEnumerable<OrderClass> LoadOrdersByCustomer(CustomerClass customer);
+        void PlaceOrder(OrderClass order);
         void Save();
-        void UpdateLocation(Location location);
-        void UpdateCustomer(Customer customer);
+        void UpdateLocation(StoreClass location);
+        void UpdateCustomer(CustomerClass customer);
         void AddIngrediantToList(string AdminUsername, string AdminPassword, string IngrediantName);
-        void RemoveLocation(string AdminUsername, string AdminPassword, Location location);
-        Customer ChangeUserPassword(string AdminUsername, string AdminPassword, Customer customer, string NewPassword);
+        void RemoveLocation(string AdminUsername, string AdminPassword, StoreClass location);
+        CustomerClass ChangeUserPassword(string AdminUsername, string AdminPassword, CustomerClass customer, string NewPassword);
 
     }
 }

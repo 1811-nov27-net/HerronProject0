@@ -12,7 +12,7 @@ namespace PizzaStoreAppTest
         public void NewStoreHasStock()
         {
             // arrange & act
-            Location SUT = new Location("Test Name");
+            StoreClass SUT = new StoreClass("Test Name");
 
             // assert
             foreach (KeyValuePair<string, int> entry in SUT.Invantory)
@@ -36,7 +36,7 @@ namespace PizzaStoreAppTest
 
         public void NewStoreHasNameGivenToConstructor(string testName)
         {
-            Location SUT = new Location(testName);
+            StoreClass SUT = new StoreClass(testName);
 
             Assert.Equal(testName, SUT.Name);
         }
@@ -53,7 +53,7 @@ namespace PizzaStoreAppTest
 
         public void NewCustomerHasNameGivenToConstructor(string testName)
         {
-            Customer SUT = new Customer(testName);
+            CustomerClass SUT = new CustomerClass(testName);
 
             Assert.Equal(testName, SUT.Username);
         }
@@ -73,7 +73,7 @@ namespace PizzaStoreAppTest
         public void NewCustomerPasswordCheck(string testName, string testPW, string testInput, bool expected)
         {
             // arrange
-            Customer SUT = new Customer(testName, testPW);
+            CustomerClass SUT = new CustomerClass(testName, testPW);
 
             // act
             bool result = SUT.CheckPassword(testInput);

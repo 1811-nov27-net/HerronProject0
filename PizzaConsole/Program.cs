@@ -1,8 +1,11 @@
-﻿using PizzaStoreApp;
+﻿using Microsoft.EntityFrameworkCore;
+using PizzaStoreApp;
+using pda = PizzaStoreApp.DataAccess;
 using PizzaStoreAppLibrary;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+
 
 namespace PizzaConsole
 {
@@ -10,6 +13,14 @@ namespace PizzaConsole
     {
         static void Main(string[] args)
         {
+
+            var optionsBuilder = new DbContextOptionsBuilder<pda.PizzaStoreDBContext>();
+            optionsBuilder.UseSqlServer(SecretString.ConnectionString);
+            var options = optionsBuilder.Options;
+
+            var dbContext = new pda.PizzaStoreDBContext(options);
+            IPizzaStoreRepo PizzaRepository = new pda.PizzaStoreRepo(dbContext);
+
 
             string UserInput;
             Console.WriteLine("Login (l), Quit (q) or Admin (a)");
@@ -120,11 +131,19 @@ namespace PizzaConsole
             Console.WriteLine("Store Name:");
             StoreClass NewStore = new StoreClass(Console.ReadLine());
             Console.WriteLine("Address, line 1:");
-
+            NewStore.Address.Street = Console.ReadLine();
             Console.WriteLine("Address, line 2:");
+            NewStore.Address.Apartment = Console.ReadLine();
             Console.WriteLine("City:");
+            NewStore.Address.City = Console.ReadLine();
             Console.WriteLine("State:");
+            NewStore.Address.State = Console.ReadLine();
             Console.WriteLine("Zip:");
+            int tempZip;
+            Int32.TryParse(Console.ReadLine(), out tempZip);
+            NewStore.Address.Zip = tempZip;
+
+            PizzaRepository.AddStore(AdminUsername: username, AdminPassword: password, location: NewStore);
 
 
         }

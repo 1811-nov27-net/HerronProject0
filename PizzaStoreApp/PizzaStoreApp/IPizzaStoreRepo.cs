@@ -1,12 +1,11 @@
 ﻿using PizzaStoreApp;
-using PizzaStoreAppLibrary;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace PizzaConsole
+namespace PizzaStoreAppLibrary
 {
-    interface IPizzaStoreRepo
+    public interface IPizzaStoreRepo
     {
         CustomerClass LoadCustomerByUsername(string username);
         IEnumerable<CustomerClass> LoadCustomerByName(string FirstName, string LastName);
@@ -22,7 +21,7 @@ namespace PizzaConsole
         void UpdateCustomer(CustomerClass customer);
         void AddIngrediantToList(string AdminUsername, string AdminPassword, string IngrediantName);
         void RemoveLocation(string AdminUsername, string AdminPassword, StoreClass location);
-        void AddLocation(string AdminUsername, string AdminPassword, StoreClass location);
+        void AddStore(string AdminUsername, string AdminPassword, StoreClass location);
         CustomerClass ChangeUserPassword(string AdminUsername, string AdminPassword, CustomerClass customer, string NewPassword);
 
     }

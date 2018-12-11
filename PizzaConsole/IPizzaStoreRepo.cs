@@ -12,6 +12,7 @@ namespace PizzaConsole
         IEnumerable<Location> LoadLocations();
         void AddCustomer(Customer customer);
         void AddAddressToCustomer(Address address, Customer customer);
+        void RemoveCustomerAddress(Address address, Customer customer);
         IEnumerable<Order> LoadOrdersByLocation(Location location);
         IEnumerable<Order> LoadOrdersByCustomer(Customer customer);
         void PlaceOrder(Order order);

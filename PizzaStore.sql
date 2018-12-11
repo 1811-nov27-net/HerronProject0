@@ -102,7 +102,8 @@ create table PS.PizzasInOrder
 	Quantity int not null
 );
 
-
+alter table PS.PizzasInOrder
+	add default 1 for Quantity;
 
 -- drop table PS.Pizza
 
@@ -156,4 +157,41 @@ alter table PS.PizzasInOrder
 	add constraint PK_PiO primary key (PizzaID, PizzaOrderID);
 
 
+-- Add entries to database
+
+
+insert into PS.Store (Street, Street2, City, Zip, State) values
+	('Order came from closed location',null,'Not a City',00000,'Not a State'),
+	('1234 Main Street',null,'Austin',73301,'Texas'),
+	('4321 Yerba Verde Bulivard',null,'San Diego',91932,'California'),
+	('333 State Street',null,'Madison',53701,'Wisconsin'),
+	('2733 East 2100 South','Suite 2B','Salt Lake City',84044,'Utah'),
+	('5421 Redridge Road',null,'Seattle',98101,'Washington'),
+	('999 Main Street',null,'Augusta',30805,'Georgia')
+	;
+
+insert into PS.Customer(FirstName, LastName, Username, Password) values
+	('Lara', 'Croft', 'TombRaider69','SodIndianaJones'),
+	('Adam', 'Jensen', 'DeusExMyFist','Pizza From The Machine'),
+	('Booker', 'DeWitt', 'ReallyHatesChicken','Ill have plasmids on mine'),
+	('John', 'Marston', 'CowboyBebop1911','10GallonHat'),
+	('Cher', 'NLN', 'Cher','I Believe in Love after Pizza'),
+	('Bill', 'Gates', 'admin','password')
+	;
+
+-- update ps.Customer set	FirstName ='Lara' where FirstName = 'Laura';
+
+insert into PS.IngrediantList(IngrediantName) values
+	('Sausage'), ('Peperoni'), ('Black Olives'), ('Green Olives'), ('Bell Peppers'), ('Jalapenos'), ('Chicken'), ('Hot Sauce'), ('Mushrooms'),
+            ('Pineapple'), ('Onions'), ('Tomatoes'), ('Extra Cheese')
+	;
+
+insert into ps.Invantory(StoreID,IngrediantID,Quantity)
+	select s.StoreID,i.IngrediantID,30 from PS.Store as s cross join PS.IngrediantList as i;
+
+select * from PS.Customer;
+-- haven't run this yet.
+insert into PS.CustomerAddress(Street, Street2, City, Zip, State, StoreID, CustomerID) values
+	('5421 Redridge Road',null,'Seattle',98101,'Washington'),
+;
 

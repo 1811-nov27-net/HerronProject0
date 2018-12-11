@@ -37,8 +37,8 @@ namespace PizzaConsole
                 username = Console.ReadLine();
                 Console.WriteLine("Password:");
                 password = Console.ReadLine();
-                
-                if(CurrentAction == 'a')
+
+                if (CurrentAction == 'a')
                 {
                     try
                     {
@@ -47,11 +47,11 @@ namespace PizzaConsole
                     catch (InvalidLoginException e)
                     {
                         Console.WriteLine(e.Message);
-                        
+
                     }
                 }
 
-                if(CurrentAction == 'l')
+                if (CurrentAction == 'l')
                 {
                     try
                     {
@@ -61,7 +61,7 @@ namespace PizzaConsole
                     catch (InvalidLoginException e)
                     {
                         Console.WriteLine(e.Message);
-                        
+
                     }
                 }
 
@@ -87,7 +87,7 @@ namespace PizzaConsole
             string UserInput = Console.ReadLine();
             char CurrentAction = Char.ToLower(UserInput[0]);
             char[] AcceptableActions = { 'a', 'c', 'u', 'l', 'n', 'o' };
-            while (Array.Exists<char>(AcceptableActions,c => c == CurrentAction))
+            while (Array.Exists<char>(AcceptableActions, c => c == CurrentAction))
             {
                 if (CurrentAction == 'a')
                 {
@@ -130,22 +130,37 @@ namespace PizzaConsole
             Console.WriteLine("Creating new store");
             Console.WriteLine("Store Name:");
             StoreClass NewStore = new StoreClass(Console.ReadLine());
-            Console.WriteLine("Address, line 1:");
-            NewStore.Address.Street = Console.ReadLine();
-            Console.WriteLine("Address, line 2:");
-            NewStore.Address.Apartment = Console.ReadLine();
-            Console.WriteLine("City:");
-            NewStore.Address.City = Console.ReadLine();
-            Console.WriteLine("State:");
-            NewStore.Address.State = Console.ReadLine();
-            Console.WriteLine("Zip:");
-            int tempZip;
-            Int32.TryParse(Console.ReadLine(), out tempZip);
-            NewStore.Address.Zip = tempZip;
+            bool errors = false;
+            try
+            {
 
-            PR.AddStore(AdminUsername: username, AdminPassword: password, location: NewStore);
+                Console.WriteLine("Address, line 1:");
+                NewStore.Address.Street = Console.ReadLine();
+                Console.WriteLine("Address, line 2:");
+                NewStore.Address.Apartment = Console.ReadLine();
+                Console.WriteLine("City:");
+                NewStore.Address.City = Console.ReadLine();
+                Console.WriteLine("State:");
+                NewStore.Address.State = Console.ReadLine();
+                Console.WriteLine("Zip:");
+                int tempZip;
+                Int32.TryParse(Console.ReadLine(), out tempZip);
+                NewStore.Address.Zip = tempZip;
+            }
+            catch (InvalidNullFieldException e)
+            {
+                errors = true;
+                Console.WriteLine($"Error: {e.Message} cannot be null");
+                
+            }
 
+            if (!errors)
+            {
+                PR.AddStore(AdminUsername: username, AdminPassword: password, location: NewStore);
+                PR.Save();
 
+                Console.WriteLine("Store added.");
+            }
         }
 
         private static void CloseLocation(string username, string password, IPizzaStoreRepo PR)
@@ -178,7 +193,7 @@ namespace PizzaConsole
         public void OrderPizza(CustomerClass customer, string password)
         {
             string answer;
-
+            char ans;
             OrderClass CurrentOrder = new OrderClass(customer, password);
             bool placeOrder = false, quitLoop = false;
             while (placeOrder == false && quitLoop == false)
@@ -186,7 +201,7 @@ namespace PizzaConsole
                 Console.WriteLine($"Your order currently contains {CurrentOrder.pizzas.Count} pizzas.");
                 Console.WriteLine("Would you like to (a)dd a pizza, (r)emove a pizza, (p)lace your order or (c)ancel your order?");
                 answer = Console.ReadLine();
-
+                ans = Char.ToLower(answer[0]);
 
             }
 
@@ -202,9 +217,9 @@ namespace PizzaConsole
                 Console.WriteLine($"{size}: {size.ToString()}");
             }
 
-            inputSize = (PizzaClass.PizzaSize) Console.ReadLine()[0];
+            inputSize = (PizzaClass.PizzaSize)Console.ReadLine()[0];
 
-            string userInput ="y";
+            string userInput = "y";
             HashSet<string> ingrediants = new HashSet<string>();
             while (userInput[0] != 'd' && userInput[0] != 'D')
             {
@@ -212,7 +227,8 @@ namespace PizzaConsole
                 if (ingrediants.Count == 0)
                 {
                     Console.Write("no toppings");
-                } else
+                }
+                else
                 {
                     foreach (string topping in ingrediants)
                     {
@@ -236,7 +252,7 @@ namespace PizzaConsole
 
             }
 
-            return new PizzaClass(inputSize,ingrediants);
+            return new PizzaClass(inputSize, ingrediants);
 
         }
     }

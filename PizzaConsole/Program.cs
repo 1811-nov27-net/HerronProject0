@@ -83,10 +83,10 @@ namespace PizzaConsole
                 throw new InvalidLoginException("Invalid Admin Username and/or Password");
             }
             Console.WriteLine("(A)dd location, (C)lose location, display order history by (u)ser, display order history by " +
-                "(l)ocation, search user by (n)ame, display details of an (o)rder (any other key to quit).");
+                "(s)tore location, order history by user (l)ocation, search user by (n)ame, display details of an (o)rder (any other key to quit).");
             string UserInput = Console.ReadLine();
             char CurrentAction = Char.ToLower(UserInput[0]);
-            char[] AcceptableActions = { 'a', 'c', 'u', 'l', 'n', 'o', 'r' };
+            char[] AcceptableActions = { 'a', 'c', 'u', 'l', 'n', 'o', 'r', 'l' };
             while (Array.Exists(AcceptableActions, c => c == CurrentAction))
             {
                 if (CurrentAction == 'a')
@@ -103,7 +103,7 @@ namespace PizzaConsole
                 }
                 if (CurrentAction == 'l')
                 {
-                    OrderHistoryByLocation(username, password, PR);
+                    OrderHistoryByStoreLocation(username, password, PR);
                 }
                 if (CurrentAction == 'n')
                 {
@@ -117,6 +117,10 @@ namespace PizzaConsole
                 {
                     ResetUserPassword(username, password, PR);
                 }
+                if (CurrentAction == 'l')
+                {
+                    OrderHistoryByUserLocation(username, password, PR);
+                }
 
 
                 Console.WriteLine("(A)dd location, (C)lose location, display order history by (u)ser, display order history by " +
@@ -127,6 +131,11 @@ namespace PizzaConsole
             }
 
 
+        }
+
+        private static void OrderHistoryByUserLocation(string username, string password, IPizzaStoreRepo pR)
+        {
+            throw new NotImplementedException();
         }
 
         private static void AddLocation(string username, string password, IPizzaStoreRepo PR)
@@ -212,7 +221,7 @@ namespace PizzaConsole
             if (customers.Count > 1)
             {
                 Console.WriteLine("Multiple users by that name found. (L)ist all?");
-                char ans = Char.ToLower(Console.ReadLine()[0]);
+                char ans = char.ToLower(Console.ReadLine()[0]);
                 if (ans == 'l')
                 {
                     foreach (var cust in customers)
@@ -236,8 +245,47 @@ namespace PizzaConsole
             }
 
         }
-        private static void OrderHistoryByLocation(string username, string password, IPizzaStoreRepo PR)
+        private static void OrderHistoryByStoreLocation(string username, string password, IPizzaStoreRepo PR)
         {
+            Console.WriteLine("Enter Location name or city.");
+            string Input = Console.ReadLine();
+            StoreClass store;
+            List<StoreClass> stores = (List<StoreClass>) PR.LoadLocations();
+            List<StoreClass> StoresByCity = stores.Where(s => s.Address.City == Input).ToList();
+            List<StoreClass> StoresByName = stores.Where(s => s.Name == Input).ToList();
+            if (StoresByName.Count == 1)
+            {
+                store = StoresByName[0];
+            } else 
+            if (StoresByCity.Count > 1)
+            {
+                Console.WriteLine("Multiple stores in that city found. Specify by name.");
+                foreach (var st in StoresByCity)
+                {
+                    Console.WriteLine(st.Name);
+                }
+                return;
+            }
+            else if (StoresByCity.Count == 0 && StoresByName.Count == 0)
+            {
+                Console.WriteLine("No stores in specified city or by specified name.");
+                return;
+            }
+            else if (StoresByCity.Count == 1)
+            {
+                store = StoresByCity[0];
+            }
+            else
+            {
+                Console.WriteLine("Something has gone horribly, horribly wrong.");
+                return;
+            }
+            IEnumerable<OrderClass> orders = PR.LoadOrdersByLocation(store);
+
+            foreach (var order in orders)
+            {
+                Console.WriteLine($"{order.DatePlaced}: {order.User} ordered {order.pizzas.Count} pizzas for {order.TotalCost}");
+            }
 
         }
         private static void OrderHistoryByName(string username, string password, IPizzaStoreRepo PR)

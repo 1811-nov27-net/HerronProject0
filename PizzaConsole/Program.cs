@@ -86,8 +86,8 @@ namespace PizzaConsole
                 "(l)ocation, search user by (n)ame, display details of an (o)rder (any other key to quit).");
             string UserInput = Console.ReadLine();
             char CurrentAction = Char.ToLower(UserInput[0]);
-            char[] AcceptableActions = { 'a', 'c', 'u', 'l', 'n', 'o' };
-            while (Array.Exists<char>(AcceptableActions, c => c == CurrentAction))
+            char[] AcceptableActions = { 'a', 'c', 'u', 'l', 'n', 'o', 'r' };
+            while (Array.Exists(AcceptableActions, c => c == CurrentAction))
             {
                 if (CurrentAction == 'a')
                 {
@@ -113,10 +113,14 @@ namespace PizzaConsole
                 {
                     DetailsOfOrder(username, password, PR);
                 }
+                if (CurrentAction == 'r')
+                {
+                    ResetUserPassword(username, password, PR);
+                }
 
 
                 Console.WriteLine("(A)dd location, (C)lose location, display order history by (u)ser, display order history by " +
-                  "(l)ocation, search user by (n)ame, display details of an (o)rder (any other key to quit).");
+                  "(l)ocation, search user by (n)ame, display details of an (o)rder, (r)eset user password (any other key to quit).");
                 UserInput = Console.ReadLine();
                 CurrentAction = Char.ToLower(UserInput[0]);
 
@@ -200,6 +204,36 @@ namespace PizzaConsole
         }
         private static void SearchUserByName(string username, string password, IPizzaStoreRepo PR)
         {
+            Console.WriteLine("User First Name:");
+            string UserFirstName = Console.ReadLine();
+            Console.WriteLine("User Last Name:");
+            string UserLastName = Console.ReadLine();
+            List<CustomerClass> customers = (List<CustomerClass>) PR.LoadCustomerByName(UserFirstName, UserLastName);
+            if (customers.Count > 1)
+            {
+                Console.WriteLine("Multiple users by that name found. (L)ist all?");
+                char ans = Char.ToLower(Console.ReadLine()[0]);
+                if (ans == 'l')
+                {
+                    foreach (var cust in customers)
+                    {
+                        Console.WriteLine($"Username: {cust.Username}");
+                        Console.WriteLine($"First Address Zip Code: {cust.Addresses[0].Zip}");
+                        Console.WriteLine($"Favorite Store Name: {cust.FavoriteStore}");
+                    }
+                }
+            } else if(customers.Count == 0)
+            {
+                Console.WriteLine("No customers by that name found.");
+            }
+            else
+            {
+                var cust = customers[0];
+                Console.WriteLine($"Username: {cust.Username}");
+                Console.WriteLine($"First Address Zip Code: {cust.Addresses[0].Zip}");
+                Console.WriteLine($"Favorite Store Name: {cust.FavoriteStore}");
+
+            }
 
         }
         private static void OrderHistoryByLocation(string username, string password, IPizzaStoreRepo PR)
@@ -211,6 +245,10 @@ namespace PizzaConsole
 
         }
         private static void DetailsOfOrder(string username, string password, IPizzaStoreRepo PR)
+        {
+
+        }
+        private static void ResetUserPassword(string username, string password, IPizzaStoreRepo PR)
         {
 
         }

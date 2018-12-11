@@ -9,7 +9,7 @@ namespace PizzaStoreApp
         public string Username { get; set; }
         private string Password;
         private int failedPasswordChecks;
-        public AddressClass Address { get; set; }
+        public List<AddressClass> Addresses { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string FavoriteStore { get; set; }

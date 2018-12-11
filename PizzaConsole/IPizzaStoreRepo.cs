@@ -9,6 +9,7 @@ namespace PizzaConsole
     interface IPizzaStoreRepo
     {
         CustomerClass LoadCustomerByUsername(string username);
+        IEnumerable<CustomerClass> LoadCustomerByName(string FirstName, string LastName);
         IEnumerable<StoreClass> LoadLocations();
         void AddCustomer(CustomerClass customer);
         void AddAddressToCustomer(AddressClass address, CustomerClass customer);

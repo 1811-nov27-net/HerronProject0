@@ -11,10 +11,12 @@ namespace PizzaConsole
         static void Main(string[] args)
         {
 
-            string userInput;
-            Console.WriteLine("Login (l) or Quit (q)");
-            userInput = Console.ReadLine();
-            while (userInput[0] != 'q' && userInput[0] != 'Q')
+            string UserInput;
+            Console.WriteLine("Login (l), Quit (q) or Admin (a)");
+            UserInput = Console.ReadLine();
+            char CurrentAction = UserInput[0];
+            CurrentAction = Char.ToLower(CurrentAction);
+            while (CurrentAction == 'l' || CurrentAction == 'a')
             {
 
                 // load data
@@ -28,9 +30,11 @@ namespace PizzaConsole
                 // find customer
                 CustomerClass customer = new CustomerClass(username, password);
 
-                
-                Console.WriteLine("Enter (q) to quit, anything else to continue");
-                userInput = Console.ReadLine();
+
+                Console.WriteLine("Login (l), Quit (q) or Admin (a)");
+                UserInput = Console.ReadLine();
+                CurrentAction = UserInput[0];
+                CurrentAction = Char.ToLower(CurrentAction);
 
             }
 

@@ -605,12 +605,26 @@ namespace PizzaConsole
             while (placeOrder == false && quitLoop == false)
             {
                 Console.WriteLine($"Your order currently contains {CurrentOrder.pizzas.Count} pizzas. Your subtotal is {CurrentOrder.CostBeforeTax}");
-                Console.WriteLine("Would you like to (a)dd a pizza, (r)emove a pizza, (p)lace your order or (c)ancel your order?");
+                Console.WriteLine("Would you like to (a)dd a pizza, (r)emove a pizza, (p)lace your order, change (l)ocation or (c)ancel your order?");
                 answer = Console.ReadLine();
                 ans = char.ToLower(answer[0]);
                 if (ans == 'a')
                 {
-                    CurrentOrder.pizzas.Add(AddPizza());
+                    try
+                    {
+                        CurrentOrder.pizzas.Add(AddPizza());
+
+                    }
+                    catch (OrderTooExpensiveException e)
+                    {
+                        Console.WriteLine("Ooof, that's a lot of pizza. I'm sorry, we can't handle orders of more than $500. Try removing some pizza.");
+                        
+                    }
+                    catch (OrderTooLargeException e)
+                    {
+                        Console.WriteLine("Ooof, that's a lot of pizza. I'm sorry, we can't handle orders of more than 12 pizzas at once. Try removing some pizza.");
+
+                    }
                 }
                 else if (ans == 'r')
                 {
@@ -621,6 +635,10 @@ namespace PizzaConsole
                     Console.WriteLine($"Your final total comes to {CurrentOrder.TotalCost}");
                     PR.PlaceOrder(CurrentOrder);
                     Console.WriteLine("Order Placed. Enjoy your Pizza!");
+                }
+                else if (ans == 'l')
+                {
+                    Console.WriteLine("Order Canceled.");
                 }
                 else if (ans == 'c')
                 {

@@ -37,6 +37,10 @@ namespace PizzaStoreAppLibrary
 
         public void AddPizza (PizzaClass.PizzaSize size, HashSet<string> ingrediants)
         {
+            if (pizzas.Count > 12)
+            {
+                throw new OrderTooLargeException();
+            }
             PizzaClass pizza = new PizzaClass(size, ingrediants);
             pizzas.Add(pizza);
             UpdateTotal();
@@ -52,6 +56,8 @@ namespace PizzaStoreAppLibrary
             _costBeforeTax = _totalCost;
             _totalCost *= (1+TaxRate); // tax
             _totalCost += DeliveryFee; // delivery fee
+            if (_totalCost > 500)
+                throw new OrderTooExpensiveException();
             return _totalCost;
         }
 

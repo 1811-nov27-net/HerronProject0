@@ -460,11 +460,11 @@ namespace PizzaConsole
             {
                 if (CurrentAction == 'a')
                 {
-                    AddCustomerAddress(customer, password, PR);
+                    AddCustomerAddress(customer, PR);
                 }
                 if (CurrentAction == 'v')
                 {
-                    ViewSuggestedOrder(customer, password, PR);
+                    ViewSuggestedOrder(customer, PR);
                 }
                 if (CurrentAction == 'p')
                 {
@@ -480,14 +480,28 @@ namespace PizzaConsole
 
         }
 
-        private static void ViewSuggestedOrder(CustomerClass customer, string password, IPizzaStoreRepo pR)
+        private static void ViewSuggestedOrder(CustomerClass customer, IPizzaStoreRepo PR)
         {
             throw new NotImplementedException();
         }
 
-        private static void AddCustomerAddress(CustomerClass customer, string password, IPizzaStoreRepo pR)
+        private static void AddCustomerAddress(CustomerClass customer, IPizzaStoreRepo PR)
         {
-            throw new NotImplementedException();
+            AddressClass address = new AddressClass();
+            Console.WriteLine("Enter the street: ");
+            address.Street = Console.ReadLine();
+            Console.WriteLine("Enter the apartment or room number: ");
+            address.Apartment = Console.ReadLine();
+            Console.WriteLine("Enter the City: ");
+            address.City = Console.ReadLine();
+            Console.WriteLine("Enter the State: ");
+            address.State = Console.ReadLine();
+            Console.WriteLine("Enter the Zip Code: ");
+            int.TryParse(Console.ReadLine(), out int tempZip);
+            address.Zip = tempZip;
+
+            PR.AddAddressToCustomer(address, customer);
+
         }
 
         public static void OrderPizza(CustomerClass customer, string password, IPizzaStoreRepo PR)

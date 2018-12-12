@@ -8,6 +8,8 @@ namespace PizzaStoreAppLibrary
     public interface IPizzaStoreRepo
     {
         CustomerClass LoadCustomerByUsername(string username);
+        Dictionary<int, string> GenerateIngrediantDictionary();
+        string GetPizzaID(PizzaClass pizza);
         IEnumerable<CustomerClass> LoadCustomerByName(string FirstName, string LastName);
         IEnumerable<StoreClass> LoadLocations();
         void AddCustomer(CustomerClass customer);

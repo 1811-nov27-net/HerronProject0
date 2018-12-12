@@ -53,7 +53,7 @@ namespace PizzaStoreAppLibrary
 
         public enum PizzaSize
         {
-            Personal,
+            Personal = 0,
             Small,
             Medium,
             Large,

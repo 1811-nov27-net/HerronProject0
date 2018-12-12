@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Microsoft.EntityFrameworkCore;
 using PizzaStoreAppLibrary;
 
 namespace PizzaStoreApp.DataAccess
@@ -41,6 +42,23 @@ namespace PizzaStoreApp.DataAccess
         }
 
         public void ChangeUserPassword(string AdminUsername, string AdminPassword, CustomerClass customer, string NewPassword)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Dictionary<int, string> GenerateIngrediantDictionary()
+        {
+            Dictionary<int, string> ret = new Dictionary<int, string>();
+            var tempDic = _db.IngrediantList.ToDictionaryAsync(i => i.IngrediantId,i=>i.IngrediantName);
+            foreach (var kvp in tempDic)
+            {
+
+            }
+
+            return ret;
+        }
+
+        public string GetPizzaID(PizzaClass pizza)
         {
             throw new NotImplementedException();
         }

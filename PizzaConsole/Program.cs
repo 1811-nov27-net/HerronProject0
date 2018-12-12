@@ -84,7 +84,7 @@ namespace PizzaConsole
             Console.WriteLine("(A)dd location, (C)lose location, display order history by (u)ser, display order history by " +
                 "(s)tore location, order history by user (l)ocation, search user by (n)ame, display details of an (o)rder (any other key to quit).");
             string UserInput = Console.ReadLine();
-            char CurrentAction = Char.ToLower(UserInput[0]);
+            char CurrentAction = char.ToLower(UserInput[0]);
             char[] AcceptableActions = { 'a', 'c', 'u', 'l', 'n', 'o', 'r', 'l' };
             if (!Array.Exists(AcceptableActions, c => c == CurrentAction))
                 return;
@@ -139,8 +139,9 @@ namespace PizzaConsole
             Console.WriteLine("Enter username of user");
             string Input = Console.ReadLine();
             CustomerClass user = PR.LoadCustomerByUsername(Input);
-            Console.WriteLine("Enter name of store:");
+            Console.WriteLine("Enter zip code of address");
             Input = Console.ReadLine();
+
             
             List<OrderClass> orders = (List<OrderClass>)PR.LoadOrdersByCustomer(user);
             List<OrderClass> sortedOrders = null;
@@ -203,8 +204,7 @@ namespace PizzaConsole
                 Console.WriteLine("State:");
                 NewStore.Address.State = Console.ReadLine();
                 Console.WriteLine("Zip:");
-                int tempZip;
-                Int32.TryParse(Console.ReadLine(), out tempZip);
+                Int32.TryParse(Console.ReadLine(), out int tempZip);
                 NewStore.Address.Zip = tempZip;
 
                 PR.AddStore(AdminUsername: username, AdminPassword: password, location: NewStore);
@@ -266,31 +266,37 @@ namespace PizzaConsole
             Console.WriteLine("User Last Name:");
             string UserLastName = Console.ReadLine();
             List<CustomerClass> customers = (List<CustomerClass>) PR.LoadCustomerByName(UserFirstName, UserLastName);
+            CustomerClass cust = null;
             if (customers.Count > 1)
             {
                 Console.WriteLine("Multiple users by that name found. (L)ist all?");
                 char ans = char.ToLower(Console.ReadLine()[0]);
                 if (ans == 'l')
                 {
-                    foreach (var cust in customers)
+                    for(int i=0; i<customers.Count; i++)
                     {
-                        Console.WriteLine($"Username: {cust.Username}");
-                        Console.WriteLine($"First Address Zip Code: {cust.Addresses[0].Zip}");
-                        Console.WriteLine($"Favorite Store Name: {cust.FavoriteStore}");
+                        Console.WriteLine($"Customer {i} Username: {customers[i].Username}");
                     }
                 }
+                Console.WriteLine("Enter customer number to retrieve information on that customer");
+                Int32.TryParse(Console.ReadLine(), out int custNum);
+                cust = customers[custNum];
             } else if(customers.Count == 0)
             {
                 Console.WriteLine("No customers by that name found.");
             }
             else
             {
-                var cust = customers[0];
-                Console.WriteLine($"Username: {cust.Username}");
-                Console.WriteLine($"First Address Zip Code: {cust.Addresses[0].Zip}");
-                Console.WriteLine($"Favorite Store Name: {cust.FavoriteStore}");
+                cust = customers[0];
 
             }
+            Console.WriteLine($"Username: {cust.Username}");
+            for (int i = 0; i < cust.Addresses.Count(); i++)
+            {
+                Console.WriteLine($"Address #{i} zip code: {cust.Addresses[i].Zip}");
+            }
+            Console.WriteLine($"Favorite Store Name: {cust.FavoriteStore}");
+
             Console.WriteLine("Press return to continue.");
             Console.ReadLine();
 

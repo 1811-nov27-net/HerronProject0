@@ -7,7 +7,7 @@ namespace PizzaStoreApp
     public class CustomerClass
     {
         public string Username { get; set; }
-        private string Password;
+        private readonly string Password;
         private int failedPasswordChecks;
         public List<AddressClass> Addresses { get; set; }
         public string FirstName { get; set; }
@@ -16,11 +16,7 @@ namespace PizzaStoreApp
         public Dictionary<string, int> PrevLocationsOrdered { get; set; } // number of times ordered from locations, by name of location
         public List<OrderClass> PreviousOrders = new List<OrderClass>();
 
-        public CustomerClass(string newUsername)
-        {
-            Username = newUsername;
-        }
-
+        
         public CustomerClass(string newUsername, string newPassword)
         {
             Username = newUsername;

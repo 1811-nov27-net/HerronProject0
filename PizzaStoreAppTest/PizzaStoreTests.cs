@@ -53,7 +53,7 @@ namespace PizzaStoreAppTest
 
         public void NewCustomerHasNameGivenToConstructor(string testName)
         {
-            CustomerClass SUT = new CustomerClass(testName);
+            CustomerClass SUT = new CustomerClass(testName,"whatever, man");
 
             Assert.Equal(testName, SUT.Username);
         }

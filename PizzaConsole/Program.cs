@@ -280,9 +280,42 @@ namespace PizzaConsole
                 Console.WriteLine("Something has gone horribly, horribly wrong.");
                 return;
             }
-            IEnumerable<OrderClass> orders = PR.LoadOrdersByLocation(store);
+            List<OrderClass> orders = (List<OrderClass>) PR.LoadOrdersByLocation(store);
+            List<OrderClass> sortedOrders = null;
+            char response;
+            char[] validResponses = { 'r', 'o', 'm', 'l', 'q' }; 
+            do
+            {
 
-            foreach (var order in orders)
+
+                Console.WriteLine("Sort by most (r)ecent, (o)ldest, (m)ost expensive or (l)east expensive? (q to give up)");
+                response = char.ToLower(Console.ReadLine()[0]);
+                if (response == 'r')
+                {
+                    sortedOrders = orders.OrderBy(o => o.DatePlaced).ToList();
+                }
+                else if (response == 'o')
+                {
+                    sortedOrders = orders.OrderByDescending(o => o.DatePlaced).ToList();
+                }
+                else if (response == 'm')
+                {
+                    sortedOrders = orders.OrderByDescending(o => o.TotalCost).ToList();
+                }
+                else if (response == 'l')
+                {
+                    sortedOrders = orders.OrderBy(o => o.TotalCost).ToList();
+                } else if (response == 'q')
+                {
+                    Console.WriteLine("Ah, well, nevermind then.");
+                    return;
+                }
+                else
+                {
+                    Console.WriteLine("I'm sorry, I didn't get that. Please try again.");
+                }
+            } while (!validResponses.Contains(response));
+            foreach (var order in sortedOrders)
             {
                 Console.WriteLine($"{order.DatePlaced}: {order.User} ordered {order.pizzas.Count} pizzas for {order.TotalCost}");
             }

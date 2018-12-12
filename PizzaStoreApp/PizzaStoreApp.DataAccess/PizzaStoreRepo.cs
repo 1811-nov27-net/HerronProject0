@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using PizzaStoreAppLibrary;
 
@@ -23,99 +25,156 @@ namespace PizzaStoreApp.DataAccess
 
         public void AddAddressToCustomer(AddressClass address, CustomerClass customer)
         {
-            throw new NotImplementedException();
+            Customer cust = _db.Customer.Include(c => c.CustomerAddress).First(c => c.Username == customer.Username);
+            cust.CustomerAddress.Add(Mapper.Map(address));
+            Save();
         }
 
         public void AddCustomer(CustomerClass customer)
         {
-            throw new NotImplementedException();
+            _db.Customer.Add(Mapper.Map(customer));
+            Save();
         }
 
         public void AddIngrediantToList(string AdminUsername, string AdminPassword, string IngrediantName)
         {
-            throw new NotImplementedException();
+            IngrediantList ig = new IngrediantList
+            {
+                IngrediantName = IngrediantName
+            };
+            _db.IngrediantList.Add(ig);
+            Save();
         }
 
         public void AddStore(string AdminUsername, string AdminPassword, StoreClass location)
         {
-            
+            if (AdminPassword == SecretString.AdminPassword && AdminUsername == SecretString.AdminUsername)
+            {
+                _db.Store.Add(Mapper.Map(location));
+                Save();
+
+            }
+            else
+            {
+                throw new InvalidLoginException();
+            }
         }
 
         public void ChangeUserPassword(string AdminUsername, string AdminPassword, CustomerClass customer, string NewPassword)
         {
-            throw new NotImplementedException();
+            if (AdminUsername == SecretString.AdminUsername && AdminPassword == SecretString.AdminPassword)
+            {
+                Customer NewCust = _db.Customer.First(c => c.Username == customer.Username);
+                NewCust.Password = NewPassword;
+
+            }
+            else
+            {
+                throw new InvalidLoginException();
+            }
         }
 
         public Dictionary<int, string> GenerateIngrediantDictionary()
         {
             Dictionary<int, string> ret = new Dictionary<int, string>();
-            var tempDic = _db.IngrediantList.ToDictionaryAsync(i => i.IngrediantId,i=>i.IngrediantName);
-            foreach (var kvp in tempDic)
+            var tempDic = _db.IngrediantList.Where(c => c.IngrediantName != null).AsNoTracking();
+            foreach (var ingrediant in tempDic)
             {
-
+                ret[ingrediant.IngrediantId] = ingrediant.IngrediantName;
             }
 
             return ret;
         }
-
-        public string GetPizzaID(PizzaClass pizza)
-        {
-            throw new NotImplementedException();
-        }
-
+        
         public IEnumerable<CustomerClass> LoadCustomerByName(string FirstName, string LastName)
         {
-            throw new NotImplementedException();
+            return Mapper.Map(_db.Customer.Where(c => c.FirstName == FirstName && c.LastName == LastName).AsNoTracking());
         }
 
         public CustomerClass LoadCustomerByUsername(string username)
         {
-            throw new NotImplementedException();
+            return Mapper.Map(_db.Customer.First(c => c.Username == username));
         }
 
         public IEnumerable<StoreClass> LoadLocations()
         {
-            throw new NotImplementedException();
+            List<Store> temp = _db.Store.ToList();
+            List<StoreClass> ret = new List<StoreClass>();
+            foreach (var store in temp)
+            {
+                ret.Add(Mapper.Map(store));
+            }
+            return ret;
         }
 
         public IEnumerable<OrderClass> LoadOrdersByCustomer(CustomerClass customer)
         {
-            throw new NotImplementedException();
+            int custID = _db.Customer.Where(c => c.Username == customer.Username).First().CustomerId;
+            List<PizzaOrder> temp = _db.PizzaOrder.Where(o => o.CustomerId == custID).ToList();
+            List<OrderClass> ret = new List<OrderClass>();
+            foreach (var order in temp)
+            {
+                ret.Add(Mapper.Map(order));
+            }
+            return ret;
         }
 
         public IEnumerable<OrderClass> LoadOrdersByLocation(StoreClass location)
         {
-            throw new NotImplementedException();
+            int locID = _db.Store.Where(s => s.StoreName == location.Name).First().StoreId;
+            List<PizzaOrder> temp = _db.PizzaOrder.Where(o => o.StoreId == locID).ToList();
+            List<OrderClass> ret = new List<OrderClass>();
+            foreach (var order in temp)
+            {
+                ret.Add(Mapper.Map(order));
+            }
+            return ret;
         }
 
         public void PlaceOrder(OrderClass order)
         {
-            throw new NotImplementedException();
+            _db.Add(Mapper.Map(order));
         }
 
         public void RemoveCustomerAddress(AddressClass address, CustomerClass customer)
         {
-            throw new NotImplementedException();
+            int addID = _db.CustomerAddress.Where(a => a.Street == address.Street && a.State == address.State).First().CustomerAddressId;
+            List<PizzaOrder> OldOrderList = _db.PizzaOrder.Where(o => o.CustomerAddressId == addID).ToList();
+            foreach (var order in OldOrderList)
+            {
+                order.CustomerAddressId = 1; // one is the "deleted customer address" value
+            }
+            _db.Remove(_db.CustomerAddress.Where(ca => ca.Customer.Username == customer.Username && ca.Street == address.Street));
+            Save();
         }
 
         public void RemoveLocation(string AdminUsername, string AdminPassword, StoreClass location)
         {
-            throw new NotImplementedException();
+            if (AdminUsername == SecretString.AdminUsername && AdminPassword == SecretString.AdminPassword)
+            {
+                _db.Remove(_db.Store.Where(s => s.StoreName == location.Name));
+                Save();
+            }
+            else
+            {
+                throw new InvalidLoginException();
+            }
         }
 
         public void Save()
         {
-            throw new NotImplementedException();
+            _db.SaveChanges();
         }
 
         public void UpdateCustomer(CustomerClass customer)
         {
-            throw new NotImplementedException();
+            _db.Entry(_db.Customer.Find(customer.Username)).CurrentValues.SetValues(Mapper.Map(customer));
+            Save();
         }
 
         public void UpdateLocation(StoreClass location)
         {
-            throw new NotImplementedException();
+            _db.Entry(_db.Customer.Find(location.Name)).CurrentValues.SetValues(Mapper.Map(location));
         }
     }
 }

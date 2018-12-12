@@ -141,11 +141,16 @@ namespace PizzaConsole
             CustomerClass user = PR.LoadCustomerByUsername(Input);
             Console.WriteLine("Enter zip code of address");
             Input = Console.ReadLine();
-
+            int.TryParse(Input, out int TargetZip);
             
-            List<OrderClass> orders = (List<OrderClass>)PR.LoadOrdersByCustomer(user);
+            List<OrderClass> orders = (List<OrderClass>)PR.LoadOrdersByCustomer(user).Where(e => e.DeliveryAddress.Zip == TargetZip);
             List<OrderClass> sortedOrders = null;
             char response;
+            if (orders.Count == 0)
+            {
+                Console.WriteLine("No orders found.");
+                return;
+            }
             char[] validResponses = { 'r', 'o', 'm', 'l', 'q' };
             do
             {

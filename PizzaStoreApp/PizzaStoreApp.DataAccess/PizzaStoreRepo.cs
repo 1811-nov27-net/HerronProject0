@@ -40,7 +40,7 @@ namespace PizzaStoreApp.DataAccess
             
         }
 
-        public CustomerClass ChangeUserPassword(string AdminUsername, string AdminPassword, CustomerClass customer, string NewPassword)
+        public void ChangeUserPassword(string AdminUsername, string AdminPassword, CustomerClass customer, string NewPassword)
         {
             throw new NotImplementedException();
         }

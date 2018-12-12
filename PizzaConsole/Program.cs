@@ -439,7 +439,17 @@ namespace PizzaConsole
         }
         private static void ResetUserPassword(string username, string password, IPizzaStoreRepo PR)
         {
-
+            Console.WriteLine("Enter customer username:");
+            string CustUsername = Console.ReadLine();
+            CustomerClass customer = PR.LoadCustomerByUsername(CustUsername);
+            if(customer == null)
+            {
+                Console.WriteLine("No user found.");
+                return;
+            }
+            Console.WriteLine("Enter new Password for User:");
+            string NewUserPassword = Console.ReadLine();
+            PR.ChangeUserPassword(username, password, customer, NewUserPassword);
         }
 
 

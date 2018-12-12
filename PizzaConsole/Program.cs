@@ -604,16 +604,55 @@ namespace PizzaConsole
             bool placeOrder = false, quitLoop = false;
             while (placeOrder == false && quitLoop == false)
             {
-                Console.WriteLine($"Your order currently contains {CurrentOrder.pizzas.Count} pizzas.");
+                Console.WriteLine($"Your order currently contains {CurrentOrder.pizzas.Count} pizzas. Your subtotal is {CurrentOrder.CostBeforeTax}");
                 Console.WriteLine("Would you like to (a)dd a pizza, (r)emove a pizza, (p)lace your order or (c)ancel your order?");
                 answer = Console.ReadLine();
                 ans = char.ToLower(answer[0]);
+                if (ans == 'a')
+                {
+                    CurrentOrder.pizzas.Add(AddPizza());
+                }
+                else if (ans == 'r')
+                {
+                    RemovePizza(CurrentOrder);
+                }
+                else if (ans == 'p')
+                {
+                    Console.WriteLine($"Your final total comes to {CurrentOrder.TotalCost}");
+                    PR.PlaceOrder(CurrentOrder);
+                    Console.WriteLine("Order Placed. Enjoy your Pizza!");
+                }
+                else if (ans == 'c')
+                {
+                    Console.WriteLine("Order Canceled.");
+                    return;
+                }
+
 
             }
 
         }
 
-        public PizzaClass AddPizza(OrderClass order)
+        public static void RemovePizza(OrderClass order)
+        {
+            for (int i = 0; i < order.pizzas.Count; i++)
+            {
+                Console.WriteLine($"Pizza #{i+1}:");
+                DisplayPizza(order.pizzas[i]);
+            }
+            Console.WriteLine("Delete Which Pizza (0 for none)?");
+            int ans = int.Parse(Console.ReadLine());
+            if (ans == 0)
+            {
+                Console.WriteLine("Deleting no pizzas.");
+            }
+            else
+            {
+                order.RemovePizza(ans-1);
+            }
+        }
+
+        public static PizzaClass AddPizza()
         {
 
             PizzaClass.PizzaSize inputSize;

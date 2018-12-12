@@ -30,7 +30,7 @@ namespace PizzaStoreAppLibrary
             {
                 _user = customer.Username;
                 Store = customer.FavoriteStore ?? customer.PreviousOrders[customer.PreviousOrders.Count - 1].Store ?? "Main";
-                
+                _costBeforeTax = 0;
             }
 
         }
@@ -55,8 +55,11 @@ namespace PizzaStoreAppLibrary
             return _totalCost;
         }
 
-
-
+        public void RemovePizza(int i)
+        {
+            pizzas.RemoveAt(i);
+            UpdateTotal();
+        }
     }
 
 }

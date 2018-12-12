@@ -1,6 +1,7 @@
 ﻿using PizzaStoreAppLibrary;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace PizzaStoreApp
 {
@@ -22,6 +23,19 @@ namespace PizzaStoreApp
             Username = newUsername;
             Password = newPassword;
         }
+
+        public OrderClass SuggestOrder()
+        {
+            if (PreviousOrders.Count == 0)
+            {
+                return null;
+            }
+            else
+            {
+                return PreviousOrders.OrderByDescending(o => o.DatePlaced).First();
+            }
+        }
+
 
         public bool CheckPassword(string testPassword)
         {

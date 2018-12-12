@@ -463,12 +463,7 @@ namespace PizzaConsole
                     Console.WriteLine($"{order.DatePlaced}:");
                     foreach (var pizza in order.pizzas)
                     {
-                        Console.Write($"{pizza.Size} pizza with");
-                        foreach (var topping in pizza.Ingrediants)
-                        {
-                            Console.Write($" {topping}");
-                        }
-                        Console.WriteLine();
+                        DisplayPizza(pizza);
                     }
                     Console.WriteLine($"Total: {order.TotalCost}");
                 }
@@ -515,7 +510,7 @@ namespace PizzaConsole
                 }
                 if (CurrentAction == 'v')
                 {
-                    ViewSuggestedOrder(customer, PR);
+                    ViewSuggestedOrder(customer, password, PR);
                 }
                 if (CurrentAction == 'p')
                 {
@@ -530,10 +525,52 @@ namespace PizzaConsole
             }
 
         }
-
-        private static void ViewSuggestedOrder(CustomerClass customer, IPizzaStoreRepo PR)
+        public static void DisplayPizza(PizzaClass pizza)
         {
-            throw new NotImplementedException();
+            Console.Write($"{pizza.Size} pizza with");
+            foreach (var topping in pizza.Ingrediants)
+            {
+                Console.Write($" {topping}");
+            }
+            Console.WriteLine();
+
+        }
+
+        private static void ViewSuggestedOrder(CustomerClass customer, string password, IPizzaStoreRepo PR)
+        {
+            OrderClass SuggestedOrder = customer.SuggestOrder();
+            if (SuggestedOrder == null)
+            {
+                Console.WriteLine("You've never ordered from us before. You should try our One With Everything!");
+                HashSet<string> AllIngrediants = new HashSet<string>();
+                foreach (var topping in OrderClass.Ingrediants)
+                {
+                    AllIngrediants.Add(topping);
+                }
+                SuggestedOrder = new OrderClass(customer, password);
+                SuggestedOrder.AddPizza(PizzaClass.PizzaSize.XLarge, AllIngrediants);
+            }
+            else
+            {
+                Console.WriteLine("Your suggested order is: ");
+
+            }
+            foreach (var pizza in SuggestedOrder.pizzas)
+            {
+                DisplayPizza(pizza);
+            }
+            Console.WriteLine("(O)rder Suggested, create (n)ew order, or (m)odify suggested order?");
+            char ans = char.ToLower(Console.ReadLine()[0]);
+            if (ans == 'o')
+            {
+                PR.PlaceOrder(SuggestedOrder);
+            }
+            else if (ans == 'n')
+                OrderPizza(customer, password, PR);
+            else if (ans == 'm')
+                OrderPizza(customer, password, PR, SuggestedOrder.pizzas);
+            else
+                Console.WriteLine("Sorry, I don't understand. Returning to main menu.");
         }
 
         private static void AddCustomerAddress(CustomerClass customer, IPizzaStoreRepo PR)
@@ -555,11 +592,15 @@ namespace PizzaConsole
 
         }
 
-        public static void OrderPizza(CustomerClass customer, string password, IPizzaStoreRepo PR)
+        public static void OrderPizza(CustomerClass customer, string password, IPizzaStoreRepo PR, List<PizzaClass> StarterPizzas = null)
         {
             string answer;
             char ans;
             OrderClass CurrentOrder = new OrderClass(customer, password);
+            if (StarterPizzas != null)
+            {
+                CurrentOrder.pizzas = StarterPizzas;
+            }
             bool placeOrder = false, quitLoop = false;
             while (placeOrder == false && quitLoop == false)
             {

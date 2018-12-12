@@ -435,6 +435,47 @@ namespace PizzaConsole
         }
         private static void DetailsOfOrder(string username, string password, IPizzaStoreRepo PR)
         {
+            Console.WriteLine("Enter the username of the ordering customer:");
+            string CustUsername = Console.ReadLine();
+            CustomerClass customer = PR.LoadCustomerByUsername(CustUsername);
+            if (customer == null)
+            {
+                Console.WriteLine("No such customer found.");
+                return;
+            }
+            Console.WriteLine("Enter the year of the order:");
+            int YearOfOrder = int.Parse(Console.ReadLine());
+            Console.WriteLine("Enter the month (number) of the order:");
+            int MonthOfOrder = int.Parse(Console.ReadLine());
+            Console.WriteLine("Enter the day of the month of the order:");
+            int DayOfOrder = int.Parse(Console.ReadLine());
+            List<OrderClass> orders = PR.LoadOrdersByCustomer(customer).ToList();
+            List<OrderClass> OrderResults = orders.Where(o => o.DatePlaced.Year == YearOfOrder && o.DatePlaced.Month == MonthOfOrder && o.DatePlaced.Day == DayOfOrder).OrderBy(o=>o.DatePlaced).ToList();
+            if (OrderResults.Count == 0)
+            {
+                Console.WriteLine("Customer placed no orders on that day.");
+                return;
+            }
+            else
+            {
+                foreach (var order in OrderResults)
+                {
+                    Console.WriteLine($"{order.DatePlaced}:");
+                    foreach (var pizza in order.pizzas)
+                    {
+                        Console.Write($"{pizza.Size} pizza with");
+                        foreach (var topping in pizza.Ingrediants)
+                        {
+                            Console.Write($" {topping}");
+                        }
+                        Console.WriteLine();
+                    }
+                    Console.WriteLine($"Total: {order.TotalCost}");
+                }
+            }
+            Console.WriteLine("Press return to continue.");
+            Console.ReadLine();
+
 
         }
         private static void ResetUserPassword(string username, string password, IPizzaStoreRepo PR)

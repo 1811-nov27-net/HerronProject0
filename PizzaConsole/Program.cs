@@ -30,7 +30,6 @@ namespace PizzaConsole
             while (CurrentAction == 'l' || CurrentAction == 'a')
             {
 
-                // load data
                 string username, password;
 
                 Console.WriteLine("Please enter your username:");
@@ -87,6 +86,8 @@ namespace PizzaConsole
             string UserInput = Console.ReadLine();
             char CurrentAction = Char.ToLower(UserInput[0]);
             char[] AcceptableActions = { 'a', 'c', 'u', 'l', 'n', 'o', 'r', 'l' };
+            if (!Array.Exists(AcceptableActions, c => c == CurrentAction))
+                return;
             while (Array.Exists(AcceptableActions, c => c == CurrentAction))
             {
                 if (CurrentAction == 'a')
@@ -133,9 +134,56 @@ namespace PizzaConsole
 
         }
 
-        private static void OrderHistoryByUserLocation(string username, string password, IPizzaStoreRepo pR)
+        private static void OrderHistoryByUserLocation(string username, string password, IPizzaStoreRepo PR)
         {
-            throw new NotImplementedException();
+            Console.WriteLine("Enter username of user");
+            string Input = Console.ReadLine();
+            CustomerClass user = PR.LoadCustomerByUsername(Input);
+            Console.WriteLine("Enter name of store:");
+            Input = Console.ReadLine();
+            
+            List<OrderClass> orders = (List<OrderClass>)PR.LoadOrdersByCustomer(user);
+            List<OrderClass> sortedOrders = null;
+            char response;
+            char[] validResponses = { 'r', 'o', 'm', 'l', 'q' };
+            do
+            {
+
+
+                Console.WriteLine("Sort by most (r)ecent, (o)ldest, (m)ost expensive or (l)east expensive? (q to give up)");
+                response = char.ToLower(Console.ReadLine()[0]);
+                if (response == 'r')
+                {
+                    sortedOrders = orders.OrderBy(o => o.DatePlaced).ToList();
+                }
+                else if (response == 'o')
+                {
+                    sortedOrders = orders.OrderByDescending(o => o.DatePlaced).ToList();
+                }
+                else if (response == 'm')
+                {
+                    sortedOrders = orders.OrderByDescending(o => o.TotalCost).ToList();
+                }
+                else if (response == 'l')
+                {
+                    sortedOrders = orders.OrderBy(o => o.TotalCost).ToList();
+                }
+                else if (response == 'q')
+                {
+                    Console.WriteLine("Ah, well, nevermind then.");
+                    return;
+                }
+                else
+                {
+                    Console.WriteLine("I'm sorry, I didn't get that. Please try again.");
+                }
+            } while (!validResponses.Contains(response));
+            foreach (var order in sortedOrders)
+            {
+                Console.WriteLine($"{order.DatePlaced}: {order.User} ordered {order.pizzas.Count} pizzas for {order.TotalCost}");
+            }
+            Console.WriteLine("Press return to continue.");
+            Console.ReadLine();
         }
 
         private static void AddLocation(string username, string password, IPizzaStoreRepo PR)
@@ -243,6 +291,9 @@ namespace PizzaConsole
                 Console.WriteLine($"Favorite Store Name: {cust.FavoriteStore}");
 
             }
+            Console.WriteLine("Press return to continue.");
+            Console.ReadLine();
+
 
         }
         private static void OrderHistoryByStoreLocation(string username, string password, IPizzaStoreRepo PR)
@@ -319,11 +370,57 @@ namespace PizzaConsole
             {
                 Console.WriteLine($"{order.DatePlaced}: {order.User} ordered {order.pizzas.Count} pizzas for {order.TotalCost}");
             }
+            Console.WriteLine("Press return to continue.");
+            Console.ReadLine();
 
         }
         private static void OrderHistoryByName(string username, string password, IPizzaStoreRepo PR)
         {
+            Console.WriteLine("Enter username of user");
+            string Input = Console.ReadLine();
+            CustomerClass user = PR.LoadCustomerByUsername(Input);
+            List<OrderClass> orders = (List<OrderClass>)PR.LoadOrdersByCustomer(user);
+            List<OrderClass> sortedOrders = null;
+            char response;
+            char[] validResponses = { 'r', 'o', 'm', 'l', 'q' };
+            do
+            {
 
+
+                Console.WriteLine("Sort by most (r)ecent, (o)ldest, (m)ost expensive or (l)east expensive? (q to give up)");
+                response = char.ToLower(Console.ReadLine()[0]);
+                if (response == 'r')
+                {
+                    sortedOrders = orders.OrderBy(o => o.DatePlaced).ToList();
+                }
+                else if (response == 'o')
+                {
+                    sortedOrders = orders.OrderByDescending(o => o.DatePlaced).ToList();
+                }
+                else if (response == 'm')
+                {
+                    sortedOrders = orders.OrderByDescending(o => o.TotalCost).ToList();
+                }
+                else if (response == 'l')
+                {
+                    sortedOrders = orders.OrderBy(o => o.TotalCost).ToList();
+                }
+                else if (response == 'q')
+                {
+                    Console.WriteLine("Ah, well, nevermind then.");
+                    return;
+                }
+                else
+                {
+                    Console.WriteLine("I'm sorry, I didn't get that. Please try again.");
+                }
+            } while (!validResponses.Contains(response));
+            foreach (var order in sortedOrders)
+            {
+                Console.WriteLine($"{order.DatePlaced}: {order.User} ordered {order.pizzas.Count} pizzas for {order.TotalCost}");
+            }
+            Console.WriteLine("Press return to continue.");
+            Console.ReadLine();
         }
         private static void DetailsOfOrder(string username, string password, IPizzaStoreRepo PR)
         {
@@ -337,10 +434,52 @@ namespace PizzaConsole
 
         private static void CustomerLoop(string username, string password, IPizzaStoreRepo PR)
         {
+            CustomerClass customer = PR.LoadCustomerByUsername(username);
+            if (customer == null || !customer.CheckPassword(password))
+            {
+                throw new InvalidLoginException("Invalid Username and/or Password");
+            }
+            Console.WriteLine("(P)lace order, (V)iew suggested order, (a)dd new address, (q)uit");
+            string UserInput = Console.ReadLine();
+            char CurrentAction = char.ToLower(UserInput[0]);
+            char[] AcceptableActions = { 'p', 'v'};
+            if (!Array.Exists(AcceptableActions, c => c == CurrentAction))
+                return;
+            while (Array.Exists(AcceptableActions, c => c == CurrentAction))
+            {
+                if (CurrentAction == 'a')
+                {
+                    AddCustomerAddress(customer, password, PR);
+                }
+                if (CurrentAction == 'v')
+                {
+                    ViewSuggestedOrder(customer, password, PR);
+                }
+                if (CurrentAction == 'p')
+                {
+                    OrderPizza(customer, password, PR);
+                }
+
+
+                Console.WriteLine("(P)lace order, (V)iew suggested order, (a)dd new address, (q)uit");
+                UserInput = Console.ReadLine();
+                CurrentAction = char.ToLower(UserInput[0]);
+
+            }
 
         }
 
-        public void OrderPizza(CustomerClass customer, string password)
+        private static void ViewSuggestedOrder(CustomerClass customer, string password, IPizzaStoreRepo pR)
+        {
+            throw new NotImplementedException();
+        }
+
+        private static void AddCustomerAddress(CustomerClass customer, string password, IPizzaStoreRepo pR)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static void OrderPizza(CustomerClass customer, string password, IPizzaStoreRepo PR)
         {
             string answer;
             char ans;
@@ -351,7 +490,7 @@ namespace PizzaConsole
                 Console.WriteLine($"Your order currently contains {CurrentOrder.pizzas.Count} pizzas.");
                 Console.WriteLine("Would you like to (a)dd a pizza, (r)emove a pizza, (p)lace your order or (c)ancel your order?");
                 answer = Console.ReadLine();
-                ans = Char.ToLower(answer[0]);
+                ans = char.ToLower(answer[0]);
 
             }
 
